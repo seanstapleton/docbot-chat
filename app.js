@@ -35,11 +35,14 @@ var intents = new builder.IntentDialog();
 bot.dialog('/', intents);
 intents.matches(/^No/i, [
     function (session) {
-        session.beginDialog('/makeDiagnosis');
+        session.send('Ok... Let me see what is wrong with you. ');
+        // session.beginDialog('/makeDiagnosis');
     },
+  /*
     function (session, results) {
         session.send('Ok... Let me see what is wrong with you. ');
     }
+    */
 ]);
 
 intents.onDefault([
@@ -47,10 +50,9 @@ intents.onDefault([
       session.beginDialog('/ensureProfile', session.userData.profile);
     },
     function (session, results) {
+
       session.userData.profile = results.response;
-      session.send("Hi %(name)s! ", session.userData.profile);
-    },
-    function (session) {
+
       session.beginDialog('/symptomAnalysis', session.userData.profile);
     }
 ]);
@@ -67,7 +69,7 @@ bot.dialog('/ensureProfile', [
     function (session, results, next) {
       if (results.response) {
           session.dialogData.profile.name = results.response;
-          session.send("Hi %(name)s! ", session.userData.profile);
+          session.send("Hi %(name)s! ", session.dialogData.profile);
       }
       session.endDialogWithResult(
       { response: session.dialogData.profile });
@@ -80,6 +82,7 @@ bot.dialog('/symptomAnalysis', [
     },
     function (session, results, next) {
       newSymptom(results.response);
+      session.send("Got it. Anything else? ", session.dialogData.profile);
       session.endDialogWithResult(
       { response: session.dialogData.profile });
     }
