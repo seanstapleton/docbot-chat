@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "6.9.4",
-  }
+  },
   "description": "ChatBot for DocBot.",
   "main": "app.js",
   "dependencies": {
