@@ -1,11 +1,11 @@
 {
   "name": "docbot-chat",
   "version": "1.0.0",
-  "engines": {
-    "node": "6.9.4",
-  },
   "description": "ChatBot for DocBot.",
   "main": "app.js",
+  "engines": {
+    "node": "6.9.4"
+  },
   "dependencies": {
     "botbuilder": "^3.7.0",
     "restify": "^4.3.0"
