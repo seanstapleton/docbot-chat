@@ -1,0 +1,28 @@
+{
+  "name": "docbot-chat",
+  "version": "1.0.0",
+  "engines": {
+    "node": "6.9.4",
+  }
+  "description": "ChatBot for DocBot.",
+  "main": "app.js",
+  "dependencies": {
+    "botbuilder": "^3.7.0",
+    "restify": "^4.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhay-venkatesh/docbot-chat.git"
+  },
+  "author": "Abhay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abhay-venkatesh/docbot-chat/issues"
+  },
+  "homepage": "https://github.com/abhay-venkatesh/docbot-chat#readme"
+}
