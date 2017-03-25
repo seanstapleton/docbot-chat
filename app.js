@@ -1,6 +1,14 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 
+// Symptom storage
+var symptomList = [];
+var symptomIndex = 0;
+var newSymptom = function(symptom) {
+  symptomList[symptomIndex] = symptom;
+  symptomIndex++;
+};
+
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -19,44 +27,61 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 
+var intents = new builder.IntentDialog();
 //=========================================================
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', [
+bot.dialog('/', intents);
+intents.matches(/^No/i, [
     function (session) {
-        session.beginDialog('/ensureProfile', session.userData.profile);
+        session.beginDialog('/makeDiagnosis');
     },
     function (session, results) {
-        session.userData.profile = results.response;
-        session.send('Hello %(name)s! I love %(company)s!', session.userData.profile);
+        session.send('Ok... Let me see what is wrong with you. ');
     }
 ]);
-bot.dialog('/ensureProfile', [
-    function (session, args, next) {
-        session.dialogData.profile = args || {};
-        if (!session.dialogData.profile.name) {
-            builder.Prompts.text(session, "Hi there! What's your name?");
-        } else {
-            next();
-        }
-    },
-    function (session, results, next) {
-        if (results.response) {
-            session.dialogData.profile.name = results.response;
-        }
-        if (!session.dialogData.profile.company) {
-          session.send("Hi %s", session.dialogData.profile.name);
-          builder.Prompts.text(session, "How are you feeling today?");
-        } else {
-            next();
-        }
+
+intents.onDefault([
+    function (session) {
+      session.beginDialog('/ensureProfile', session.userData.profile);
     },
     function (session, results) {
-        if (results.response) {
-            session.dialogData.profile.company = results.response;
-        }
-        session.endDialogWithResult(
-        { response: session.dialogData.profile });
+      session.userData.profile = results.response;
+      session.send("Hi %(name)s! ", session.userData.profile);
+    },
+    function (session) {
+      session.beginDialog('/symptomAnalysis', session.userData.profile);
     }
+]);
+
+bot.dialog('/ensureProfile', [
+    function (session, args, next) {
+      session.dialogData.profile = args || {};
+      if (!session.dialogData.profile.name) {
+          builder.Prompts.text(session, "Hi there! What's your name?");
+      } else {
+          next();
+      }
+    },
+    function (session, results, next) {
+      if (results.response) {
+          session.dialogData.profile.name = results.response;
+          session.send("Hi %(name)s! ", session.userData.profile);
+      }
+      session.endDialogWithResult(
+      { response: session.dialogData.profile });
+    }
+]);
+
+bot.dialog('/symptomAnalysis', [
+    function (session, args, next) {
+      builder.Prompts.text(session, "How are you feeling?");
+    },
+    function (session, results, next) {
+      newSymptom(results.response);
+      session.endDialogWithResult(
+      { response: session.dialogData.profile });
+    }
+
 ]);
