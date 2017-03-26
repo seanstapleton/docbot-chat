@@ -136,6 +136,7 @@ function PostCode(codestring, callback) {
       headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Content-Length': Buffer.byteLength(post_data)
+
       }
   };
 
@@ -155,64 +156,10 @@ function PostCode(codestring, callback) {
       });
   });
 
+
   // post the data
   post_req.write(post_data);
   post_req.end();
 
 
-
 }
-
-
-// intents.matches(/^No/i, [
-//     function (session) {
-//         session.beginDialog('/makeDiagnosis');
-//     },
-//     function (session, results) {
-//         session.send('Ok... Let me see what is wrong with you. ');
-//     }
-// ]);
-//
-// intents.onDefault([
-//     function (session) {
-//       session.beginDialog('/ensureProfile', session.conversationData.profile);
-//     },
-//     function (session, results) {
-//       session.conversationData.profile = results.response;
-//       session.send("Hi %(name)s! ", session.conversationData.profile);
-//     },
-//     function (session) {
-//       session.beginDialog('/symptomAnalysis', session.conversationData.profile);
-//     }
-// ]);
-//
-// bot.dialog('/ensureProfile', [
-//     function (session, args, next) {
-//       session.dialogData.profile = args || {};
-//       if (!session.dialogData.profile.name) {
-//           builder.Prompts.text(session, "Hi there! What&#39;s your name?");
-//       } else {
-//           next();
-//       }
-//     },
-//     function (session, results, next) {
-//       if (results.response) {
-//           session.dialogData.profile.name = results.response;
-//           session.send("Hi %(name)s! ", session.conversationData.profile);
-//       }
-//       session.endDialogWithResult(
-//       { response: session.dialogData.profile });
-//     }
-// ]);
-//
-// bot.dialog('/symptomAnalysis', [
-//     function (session, args, next) {
-//       builder.Prompts.text(session, "How are you feeling?");
-//     },
-//     function (session, results, next) {
-//       symptomList.push(results.response);
-//       session.endDialogWithResult(
-//       { response: session.dialogData.profile });
-//     }
-//
-// ]);
